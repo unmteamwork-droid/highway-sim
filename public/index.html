@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nottingham Relief Road — Construction Simulation</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0f1117; --bg2: #1a1d27; --bg3: #22263a;
+    --border: #2e3450; --border2: #3d4466;
+    --text: #e8eaf6; --muted: #8890b5; --hint: #555d85;
+    --accent: #4f8ef7; --accent2: #7c5cfc;
+    --green: #22c55e; --amber: #f59e0b; --red: #ef4444;
+    --teal: #14b8a6; --pink: #ec4899;
+    --radius: 8px; --radius-lg: 12px;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); min-height: 100vh; font-size: 14px; line-height: 1.5; }
+
+  /* ---- LAYOUT ---- */
+  #app { display: flex; flex-direction: column; height: 100vh; }
+  .top-bar { background: var(--bg2); border-bottom: 1px solid var(--border); padding: 10px 20px; display: flex; align-items: center; gap: 16px; flex-shrink: 0; }
+  .top-bar h1 { font-size: 15px; font-weight: 600; color: var(--text); }
+  .top-bar .subtitle { font-size: 12px; color: var(--muted); }
+  .badge { padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+  .badge-info { background: #1e3a5f; color: var(--accent); }
+  .badge-warn { background: #3d2a05; color: var(--amber); }
+  .badge-danger { background: #3d0f0f; color: var(--red); }
+  .badge-success { background: #0d3320; color: var(--green); }
+  .spacer { flex: 1; }
+
+  .main { display: flex; flex: 1; overflow: hidden; }
+
+  /* ---- SIDEBAR ---- */
+  .sidebar { width: 220px; background: var(--bg2); border-right: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; overflow-y: auto; }
+  .nav-section { padding: 12px 8px 4px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--hint); }
+  .nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; cursor: pointer; border-radius: var(--radius); margin: 1px 4px; color: var(--muted); font-size: 13px; transition: background 0.15s; border: none; background: none; width: calc(100% - 8px); text-align: left; }
+  .nav-item:hover { background: var(--bg3); color: var(--text); }
+  .nav-item.active { background: #1e2d5a; color: var(--accent); }
+  .nav-icon { width: 16px; text-align: center; font-size: 14px; }
+
+  /* ---- CONTENT ---- */
+  .content { flex: 1; overflow-y: auto; padding: 20px; }
+
+  /* ---- CARDS ---- */
+  .card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px; margin-bottom: 16px; }
+  .card-title { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px; }
+  .card-grid { display: grid; gap: 12px; }
+  .card-grid-2 { grid-template-columns: 1fr 1fr; }
+  .card-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .card-grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+  /* ---- METRIC CARDS ---- */
+  .metric { background: var(--bg3); border-radius: var(--radius); padding: 14px; }
+  .metric-label { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+  .metric-value { font-size: 22px; font-weight: 700; color: var(--text); }
+  .metric-sub { font-size: 11px; color: var(--hint); margin-top: 2px; }
+  .metric-value.good { color: var(--green); }
+  .metric-value.warn { color: var(--amber); }
+  .metric-value.bad { color: var(--red); }
+
+  /* ---- PROGRESS BAR ---- */
+  .progress-wrap { background: var(--bg3); border-radius: 4px; height: 8px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 4px; transition: width 0.5s; }
+  .progress-blue { background: var(--accent); }
+  .progress-green { background: var(--green); }
+  .progress-amber { background: var(--amber); }
+  .progress-red { background: var(--red); }
+
+  /* ---- GANTT ---- */
+  .gantt-wrap { overflow-x: auto; }
+  .gantt-table { border-collapse: collapse; width: 100%; min-width: 900px; }
+  .gantt-table th { font-size: 10px; font-weight: 600; color: var(--hint); padding: 4px 6px; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  .gantt-table td { padding: 5px 6px; border-bottom: 1px solid var(--border); font-size: 12px; vertical-align: middle; }
+  .gantt-row:hover td { background: var(--bg3); }
+  .gantt-bar-cell { min-width: 400px; }
+  .gantt-row-bar { position: relative; height: 20px; }
+  .gantt-bar { position: absolute; height: 20px; border-radius: 3px; display: flex; align-items: center; padding: 0 6px; font-size: 10px; font-weight: 600; color: white; overflow: hidden; white-space: nowrap; }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+  .dot-green { background: var(--green); }
+  .dot-amber { background: var(--amber); }
+  .dot-red { background: var(--red); }
+  .dot-blue { background: var(--accent); }
+  .dot-gray { background: var(--hint); }
+  .tag { padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; }
+  .tag-temp { background: #1e2a3d; color: #7eb5ff; }
+  .tag-earth { background: #2d1e0a; color: #f5a855; }
+  .tag-drain { background: #0a2d1e; color: #55c4a0; }
+  .tag-bridge { background: #2d0a2d; color: #d87adb; }
+  .tag-carry { background: #1a1e2d; color: #8890d4; }
+  .tag-finish { background: #1e2d1a; color: #7ec87a; }
+
+  /* ---- DECISIONS FORM ---- */
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-label { font-size: 12px; font-weight: 600; color: var(--muted); }
+  .form-sub { font-size: 11px; color: var(--hint); }
+  .form-input { background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius); padding: 8px 12px; color: var(--text); font-size: 13px; width: 100%; }
+  .form-input:focus { outline: none; border-color: var(--accent); }
+  .form-select { background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius); padding: 8px 12px; color: var(--text); font-size: 13px; width: 100%; }
+  .resource-row { display: grid; grid-template-columns: 1fr 80px 80px 100px; gap: 8px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+  .resource-row:last-child { border-bottom: none; }
+  .number-input { background: var(--bg3); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text); font-size: 12px; width: 100%; text-align: center; }
+  .cost-preview { color: var(--amber); font-weight: 600; }
+
+  /* ---- BUTTONS ---- */
+  .btn { padding: 9px 18px; border-radius: var(--radius); font-size: 13px; font-weight: 600; cursor: pointer; border: none; transition: opacity 0.15s; }
+  .btn-primary { background: var(--accent); color: white; }
+  .btn-success { background: var(--green); color: white; }
+  .btn-warn { background: var(--amber); color: #1a0a00; }
+  .btn-ghost { background: transparent; border: 1px solid var(--border2); color: var(--muted); }
+  .btn:hover { opacity: 0.85; }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
+
+  /* ---- REPORTS TABLE ---- */
+  .rep-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .rep-table th { text-align: left; padding: 8px 12px; font-size: 11px; font-weight: 600; color: var(--hint); border-bottom: 1px solid var(--border); }
+  .rep-table td { padding: 7px 12px; border-bottom: 1px solid var(--border); }
+  .rep-table tr:hover td { background: var(--bg3); }
+
+  /* ---- LOG ---- */
+  .log-wrap { max-height: 300px; overflow-y: auto; background: var(--bg3); border-radius: var(--radius); padding: 12px; font-size: 12px; font-family: monospace; }
+  .log-entry { margin-bottom: 4px; line-height: 1.6; }
+  .log-day { color: var(--accent); }
+  .log-warn { color: var(--amber); }
+  .log-bad { color: var(--red); }
+  .log-good { color: var(--green); }
+
+  /* ---- WEATHER ---- */
+  .weather-icon { font-size: 20px; }
+  .weather-bar { display: flex; gap: 4px; margin-top: 8px; }
+  .weather-cell { flex: 1; height: 40px; border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; }
+
+  /* ---- CHARTS ---- */
+  .chart-wrap { height: 220px; position: relative; }
+  canvas { max-width: 100%; }
+
+  /* ---- SCREEN VIEWS ---- */
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* ---- WELCOME / MODAL ---- */
+  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); display: flex; align-items: center; justify-content: center; z-index: 100; }
+  .modal { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 32px; max-width: 560px; width: 100%; margin: 16px; }
+  .modal h2 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+  .modal p { color: var(--muted); font-size: 13px; line-height: 1.7; margin-bottom: 12px; }
+  .modal ul { color: var(--muted); font-size: 13px; line-height: 1.8; padding-left: 18px; margin-bottom: 16px; }
+  .modal-footer { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+
+  /* ---- PROFILE CHART ---- */
+  .profile-wrap { overflow-x: auto; }
+  svg text { font-family: 'Segoe UI', system-ui, sans-serif; }
+
+  /* ---- SCROLLBAR ---- */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- WELCOME MODAL -->
+<div class="overlay" id="welcomeModal">
+  <div class="modal">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+      <div style="font-size:32px;">🏗</div>
+      <div>
+        <h2>Nottingham Eastern Relief Road</h2>
+        <div style="font-size:13px;color:var(--muted);">Construction Project Management Simulation</div>
+      </div>
+    </div>
+    <p>You are the <strong style="color:var(--text)">Project Manager</strong> responsible for constructing a new 4km dual carriageway, including 3 bridges (Railway Bridge, Shelford Road Bridge, River Trent Bridge), earthworks, drainage and carriageway layers.</p>
+    <p>The simulation runs in <strong style="color:var(--text)">decision periods</strong>. Each period you allocate resources, and the simulation applies real-world effects: weather, equipment breakdowns, and productivity variation.</p>
+    <ul>
+      <li>Contract value: <strong style="color:var(--green)">£18,500,000</strong> (to be earned)</li>
+      <li>Contract duration: <strong style="color:var(--text)">400 working days</strong></li>
+      <li>Liquidated damages: <strong style="color:var(--red)">£5,000/day</strong> if late</li>
+      <li>Project start: <strong style="color:var(--text)">1 March 2025</strong></li>
+    </ul>
+    <p style="font-size:12px;color:var(--hint);">This simulation is based on the Dam Construction Game (V7.1) methodology, adapted for UK highway construction.</p>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="document.getElementById('welcomeModal').style.display='none';showScreen('programme')">View Programme</button>
+      <button class="btn btn-primary" onclick="document.getElementById('welcomeModal').style.display='none';showScreen('decisions')">Start Planning ↗</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <div style="font-size:20px;">🛣</div>
+  <div>
+    <div class="top-bar h1" style="font-size:14px;font-weight:700;">Nottingham Eastern Relief Road</div>
+    <div class="subtitle">Construction Management Simulation</div>
+  </div>
+  <div class="spacer"></div>
+  <span id="dayBadge" class="badge badge-info">Day 0</span>
+  <span id="statusBadge" class="badge badge-warn">Planning</span>
+  <span id="weatherBadge" class="badge badge-info">☀ Dry</span>
+</div>
+
+<div class="main">
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div style="padding:12px 12px 4px;">
+    <div style="font-size:11px;color:var(--hint);margin-bottom:8px;">PROJECT PROGRESS</div>
+    <div class="progress-wrap" style="margin-bottom:4px;"><div class="progress-fill progress-blue" id="overallProgress" style="width:0%"></div></div>
+    <div style="font-size:11px;color:var(--muted);" id="overallPct">0% complete</div>
+  </div>
+  <div class="nav-section">Navigation</div>
+  <button class="nav-item active" onclick="showScreen('dashboard')" id="nav-dashboard"><span class="nav-icon">📊</span>Dashboard</button>
+  <button class="nav-item" onclick="showScreen('programme')" id="nav-programme"><span class="nav-icon">📅</span>Programme</button>
+  <button class="nav-item" onclick="showScreen('decisions')" id="nav-decisions"><span class="nav-icon">⚙</span>Decisions</button>
+  <button class="nav-item" onclick="showScreen('resources')" id="nav-resources"><span class="nav-icon">🚜</span>Resources</button>
+  <button class="nav-item" onclick="showScreen('reports')" id="nav-reports"><span class="nav-icon">📋</span>Reports</button>
+  <button class="nav-item" onclick="showScreen('profile')" id="nav-profile"><span class="nav-icon">📐</span>Site Profile</button>
+  <div class="nav-section" style="margin-top:auto;">Controls</div>
+  <button class="nav-item" onclick="showScreen('decisions');scrollToRun()" style="color:var(--accent)"><span class="nav-icon">▶</span>Run Period</button>
+  <div style="padding:12px;margin-top:4px;">
+    <div style="font-size:11px;color:var(--hint);">Budget remaining</div>
+    <div style="font-size:16px;font-weight:700;color:var(--green);" id="sidebudget">£18,500,000</div>
+  </div>
+</div>
+
+<!-- CONTENT AREA -->
+<div class="content">
+
+<!-- DASHBOARD -->
+<div class="screen active" id="screen-dashboard">
+  <div style="margin-bottom:16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+    <h2 style="font-size:18px;font-weight:700;">Project Dashboard</h2>
+    <span class="badge badge-info" id="periodLabel">Period 0 — Day 0</span>
+  </div>
+
+  <div class="card-grid card-grid-4" style="margin-bottom:16px;">
+    <div class="metric"><div class="metric-label">Days Elapsed</div><div class="metric-value" id="m-days">0</div><div class="metric-sub">of 400 contracted</div></div>
+    <div class="metric"><div class="metric-label">Total Expenditure</div><div class="metric-value warn" id="m-cost">£0</div><div class="metric-sub">budget: £18.5M</div></div>
+    <div class="metric"><div class="metric-label">Earned Value</div><div class="metric-value good" id="m-ev">£0</div><div class="metric-sub">% complete × contract</div></div>
+    <div class="metric"><div class="metric-label">Cost Performance</div><div class="metric-value" id="m-cpi">—</div><div class="metric-sub">CPI (EV/AC)</div></div>
+  </div>
+
+  <div class="card-grid card-grid-2">
+    <div class="card">
+      <div class="card-title">S-Curve — Cost vs Earned Value</div>
+      <div class="chart-wrap"><canvas id="scurveChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Activity Progress</div>
+      <div id="activityBars"></div>
+    </div>
+  </div>
+
+  <div class="card-grid card-grid-2" style="margin-top:16px;">
+    <div class="card">
+      <div class="card-title">Weather — Last Period</div>
+      <div id="weatherDisplay"><div style="color:var(--hint);font-size:13px;">No data yet — run your first decision period.</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Event Log</div>
+      <div class="log-wrap" id="logWrap"><div class="log-entry" style="color:var(--hint);">Simulation not started. Go to Decisions to allocate resources and run your first period.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- PROGRAMME / GANTT -->
+<div class="screen" id="screen-programme">
+  <div style="margin-bottom:16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+    <h2 style="font-size:18px;font-weight:700;">Construction Programme</h2>
+    <span style="font-size:12px;color:var(--muted);">Baseline Gantt — 400 working days</span>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Work Package Schedule</div>
+    <div class="gantt-wrap">
+      <table class="gantt-table" id="ganttTable">
+        <thead>
+          <tr>
+            <th style="width:50px">ID</th>
+            <th style="width:200px">Work Package</th>
+            <th style="width:60px">Cat.</th>
+            <th style="width:50px">Dur.</th>
+            <th style="width:60px">Start</th>
+            <th style="width:60px">Finish</th>
+            <th style="width:60px">% Done</th>
+            <th class="gantt-bar-cell">Timeline (400 days)</th>
+          </tr>
+        </thead>
+        <tbody id="ganttBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:0;">
+    <div class="card-title">Critical Path Summary</div>
+    <div style="font-size:13px;color:var(--muted);line-height:1.8;">
+      The critical path runs through <strong style="color:var(--text)">TW01 → TW02 → BR01</strong> (Railway Bridge) and <strong style="color:var(--text)">TW01 → BR03</strong> (River Trent Bridge — 120 day activity). 
+      Earthworks must be substantially complete before carriageway layers begin. 
+      Monitor bridge activities closely — any delay feeds directly into the overall completion date.
+    </div>
+  </div>
+</div>
+
+<!-- DECISIONS -->
+<div class="screen" id="screen-decisions">
+  <div style="margin-bottom:16px;">
+    <h2 style="font-size:18px;font-weight:700;">Decision Period</h2>
+    <p style="font-size:13px;color:var(--muted);margin-top:4px;">Allocate resources, set parameters, then run the simulation period.</p>
+  </div>
+
+  <div class="card-grid card-grid-2">
+    <div class="card">
+      <div class="card-title">Period Settings</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <div class="form-label">Decision period length (days)</div>
+          <div class="form-sub">1–20 days per run</div>
+          <input class="form-input" type="number" id="periodLength" value="5" min="1" max="20">
+        </div>
+        <div class="form-group">
+          <div class="form-label">Rainfall stop threshold (mm/day)</div>
+          <div class="form-sub">Earthworks halt above this</div>
+          <input class="form-input" type="number" id="rainThreshold" value="10" min="0" max="50">
+        </div>
+        <div class="form-group">
+          <div class="form-label">Working weekend?</div>
+          <div class="form-sub">+20% on weekend plant rates</div>
+          <select class="form-select" id="workWeekend">
+            <option value="no">No — 5-day week</option>
+            <option value="yes">Yes — work Saturdays</option>
+            <option value="both">Yes — work 7 days</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <div class="form-label">Focus Area</div>
+          <div class="form-sub">Prioritise which front</div>
+          <select class="form-select" id="focusArea">
+            <option value="earthworks">Earthworks</option>
+            <option value="bridge">Bridge Works</option>
+            <option value="carriageway">Carriageway</option>
+            <option value="all">All Fronts Balanced</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Active Work Packages This Period</div>
+      <div id="activePackages" style="font-size:13px;"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Plant Allocation — Earthworks</div>
+    <div style="display:grid;grid-template-columns:1fr 80px 80px 100px;gap:8px;padding:6px 0;font-size:11px;font-weight:600;color:var(--hint);">
+      <div>Equipment</div><div style="text-align:center">Number</div><div style="text-align:center">Rate/day</div><div style="text-align:right">Period cost</div>
+    </div>
+    <div id="plantEarthworks"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Plant Allocation — Structures & Finishing</div>
+    <div style="display:grid;grid-template-columns:1fr 80px 80px 100px;gap:8px;padding:6px 0;font-size:11px;font-weight:600;color:var(--hint);">
+      <div>Equipment</div><div style="text-align:center">Number</div><div style="text-align:center">Rate/day</div><div style="text-align:right">Period cost</div>
+    </div>
+    <div id="plantStructures"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Period Cost Preview</div>
+    <div class="card-grid card-grid-3">
+      <div class="metric"><div class="metric-label">Plant & Labour</div><div class="metric-value warn" id="prev-plant">£0</div></div>
+      <div class="metric"><div class="metric-label">Materials (est.)</div><div class="metric-value warn" id="prev-mat">£0</div></div>
+      <div class="metric"><div class="metric-label">Total Period Cost</div><div class="metric-value bad" id="prev-total">£0</div></div>
+    </div>
+  </div>
+
+  <div id="runAnchor"></div>
+  <div class="btn-row" style="margin-top:8px;">
+    <button class="btn btn-success" onclick="runPeriod()" id="runBtn">▶ Run Decision Period</button>
+    <button class="btn btn-ghost" onclick="showScreen('dashboard')">← Back to Dashboard</button>
+  </div>
+</div>
+
+<!-- RESOURCES -->
+<div class="screen" id="screen-resources">
+  <div style="margin-bottom:16px;">
+    <h2 style="font-size:18px;font-weight:700;">Resource Rates Reference</h2>
+    <p style="font-size:13px;color:var(--muted);margin-top:4px;">All rates from the Direct Cost Schedule (10-hour working day)</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Plant & Equipment (£/day)</div>
+    <table class="rep-table" id="plantTable"></table>
+  </div>
+  <div class="card">
+    <div class="card-title">Materials (£/unit)</div>
+    <table class="rep-table" id="matTable"></table>
+  </div>
+</div>
+
+<!-- REPORTS -->
+<div class="screen" id="screen-reports">
+  <div style="margin-bottom:16px;">
+    <h2 style="font-size:18px;font-weight:700;">Period Reports</h2>
+  </div>
+  <div class="card">
+    <div class="card-title">Period-by-Period Summary</div>
+    <table class="rep-table">
+      <thead><tr><th>Period</th><th>Days</th><th>Expenditure</th><th>Cum. Cost</th><th>Cum. EV</th><th>CPI</th><th>Progress</th><th>Key Events</th></tr></thead>
+      <tbody id="reportBody"></tbody>
+    </table>
+    <div style="font-size:12px;color:var(--hint);margin-top:8px;">No periods run yet.</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Productivity Summary</div>
+    <div id="productivitySummary" style="font-size:13px;color:var(--muted);">Run at least one decision period to see productivity data.</div>
+  </div>
+</div>
+
+<!-- SITE PROFILE -->
+<div class="screen" id="screen-profile">
+  <div style="margin-bottom:16px;">
+    <h2 style="font-size:18px;font-weight:700;">Site Longitudinal Profile</h2>
+    <p style="font-size:13px;color:var(--muted);margin-top:4px;">Existing ground level vs Finished Road Level — ch 0–4000m</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Vertical Profile (AOD metres)</div>
+    <div class="chart-wrap" style="height:280px;"><canvas id="profileChart"></canvas></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Cut / Fill Summary</div>
+    <div class="card-grid card-grid-4">
+      <div class="metric"><div class="metric-label">Cut sections</div><div class="metric-value warn">47 pts</div><div class="metric-sub">Max depth: 5.3m</div></div>
+      <div class="metric"><div class="metric-label">Fill sections</div><div class="metric-value good">153 pts</div><div class="metric-sub">Max depth: 9.3m</div></div>
+      <div class="metric"><div class="metric-label">Total chainage</div><div class="metric-value">4,000m</div><div class="metric-sub">201 profile points</div></div>
+      <div class="metric"><div class="metric-label">Bridge sections</div><div class="metric-value" style="color:var(--accent)">3</div><div class="metric-sub">ch210, 920, 1500</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Key Structures & Features</div>
+    <table class="rep-table">
+      <thead><tr><th>Location</th><th>Feature</th><th>Activity</th><th>Duration</th><th>Critical</th></tr></thead>
+      <tbody>
+        <tr><td>ch 0</td><td>Project start (A52)</td><td>Site compound, haul road</td><td>10–30 days</td><td>—</td></tr>
+        <tr><td>ch 15, 250, 690…</td><td>1000mm diameter pipes</td><td>Cross drainage</td><td>15 days</td><td>No</td></tr>
+        <tr><td>ch 210–230</td><td>Railway Bridge</td><td>Piling, concrete, beams</td><td>90 days</td><td style="color:var(--amber)">⚠ High</td></tr>
+        <tr><td>ch 920</td><td>Shelford Road Bridge</td><td>Piling, concrete, beams</td><td>80 days</td><td style="color:var(--amber)">⚠ Med</td></tr>
+        <tr><td>ch 1500–1600</td><td>River Trent Bridge</td><td>Piling (with pump), steel beams</td><td>120 days</td><td style="color:var(--red)">⚑ Critical</td></tr>
+        <tr><td>ch 1700–1850</td><td>Flood relief culverts</td><td>Cross drainage (x4)</td><td>20 days</td><td style="color:var(--amber)">⚠ High</td></tr>
+        <tr><td>ch 4000</td><td>Project end (BCA)</td><td>Surface course, lining</td><td>10 days</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+</div><!-- end content -->
+</div><!-- end main -->
+</div><!-- end app -->
+
+<script>
+// ============================================================
+//  GAME STATE
+// ============================================================
+const CONTRACT_VALUE = 18500000;
+const CONTRACT_DAYS = 400;
+const LD_PER_DAY = 5000;
+
+const state = {
+  currentDay: 0,
+  currentPeriod: 0,
+  totalCost: 0,
+  periods: [],
+  workPackages: [],
+  log: [],
+  charts: {},
+  profileData: [],
+  plantAlloc: {},
+};
+
+// ---- DATA ----
+const PLANT_RATES = {
+  excavator:    { wd: 1358, we: 1414, label: "Excavator + operator" },
+  backhoe:      { wd: 1260, we: 1316, label: "Backhoe loader + operator" },
+  dumpTruck:    { wd: 1050, we: 1106, label: "Dump truck + driver" },
+  tipperTruck:  { wd: 672,  we: 728,  label: "Tipper truck + driver" },
+  dozer:        { wd: 1302, we: 1358, label: "Dozer + operator" },
+  grader:       { wd: 1260, we: 1316, label: "Motor grader + operator" },
+  roller:       { wd: 826,  we: 868,  label: "Vibrating roller + driver" },
+  largeCrane:   { wd: 2282, we: 2338, label: "Large crane + operator" },
+  smallCrane:   { wd: 1302, we: 1358, label: "Small crane + operator" },
+  pileDriver:   { wd: 1764, we: 1876, label: "Pile driver + crew" },
+  paver:        { wd: 2086, we: 2254, label: "Paver + crew" },
+  sprayer:      { wd: 952,  we: 994,  label: "Bitumen sprayer + driver" },
+  flatbed:      { wd: 350,  we: 350,  label: "Flatbed truck" },
+  concretePump: { wd: 1932, we: 1988, label: "Concrete pump + operator" },
+  waterPump:    { wd: 31,   we: 31,   label: "Water pump" },
+  van:          { wd: 70,   we: 70,   label: "Van (personnel)" },
+  engineer:     { wd: 322,  we: 385,  label: "Engineer" },
+  foreman:      { wd: 343,  we: 413,  label: "Foreman / skilled operative" },
+  labourer:     { wd: 210,  we: 252,  label: "General labourer" },
+};
+
+const MATERIAL_RATES = [
+  { label: "Suitable fill (imported)", rate: 7.14,   unit: "m³" },
+  { label: "Capping material",         rate: 10.64,  unit: "m³" },
+  { label: "Sub-base",                 rate: 15.68,  unit: "m³" },
+  { label: "CBGM lower base",          rate: 60.20,  unit: "m³" },
+  { label: "Asphalt upper base",       rate: 107.80, unit: "m³" },
+  { label: "Asphalt binder course",    rate: 112.00, unit: "m³" },
+  { label: "Asphalt surface course",   rate: 124.60, unit: "m³" },
+  { label: "Drainage pipe 300mm",      rate: 13.30,  unit: "m"  },
+  { label: "Drainage pipe 1000mm",     rate: 33.60,  unit: "m"  },
+  { label: "Fencing",                  rate: 20.72,  unit: "m"  },
+  { label: "Crash barrier + posts",    rate: 24.50,  unit: "m"  },
+  { label: "Concrete C40/50",          rate: 114.80, unit: "m³" },
+  { label: "Reinforcement",            rate: 826.00, unit: "t"  },
+  { label: "Steel piles 12m",          rate: 1190,   unit: "no" },
+  { label: "Bridge bearings",          rate: 490.00, unit: "no" },
+  { label: "Concrete beams M2 17.5m",  rate: 8750,   unit: "no" },
+  { label: "Steel bridge beams 50m",   rate: 36400,  unit: "no" },
+  { label: "Bridge deck waterproofing",rate: 23.80,  unit: "m²" },
+];
+
+const WORK_PACKAGES = [
+  { id:"TW01", label:"Site Setup & Compound",       cat:"temp",       dur:10, deps:[],                         baseDur:10,  pct:0 },
+  { id:"TW02", label:"Temp Railway Crossing",        cat:"temp",       dur:15, deps:["TW01"],                   baseDur:15,  pct:0 },
+  { id:"TW03", label:"Haul Road (full length)",      cat:"temp",       dur:30, deps:["TW01"],                   baseDur:30,  pct:0 },
+  { id:"EW01", label:"Earthworks Zone 1 (ch0-800)",  cat:"earthworks", dur:40, deps:["TW01"],                   baseDur:40,  pct:0 },
+  { id:"EW02", label:"Earthworks Zone 2 (ch800-1500)",cat:"earthworks",dur:35, deps:["TW01"],                   baseDur:35,  pct:0 },
+  { id:"EW03", label:"Earthworks Zone 3 (ch1500-2200)",cat:"earthworks",dur:30,deps:["EW02"],                   baseDur:30,  pct:0 },
+  { id:"EW04", label:"Earthworks Zone 4 (ch2200-3200)",cat:"earthworks",dur:40,deps:["TW01"],                   baseDur:40,  pct:0 },
+  { id:"EW05", label:"Earthworks Zone 5 (ch3200-4000)",cat:"earthworks",dur:35,deps:["EW04"],                   baseDur:35,  pct:0 },
+  { id:"DR01", label:"Drainage — Side Drains",       cat:"drainage",   dur:25, deps:["EW01","EW02","EW03","EW04","EW05"], baseDur:25, pct:0 },
+  { id:"DR02", label:"Drainage — 1000mm Pipes",      cat:"drainage",   dur:15, deps:["DR01"],                   baseDur:15,  pct:0 },
+  { id:"BR01", label:"Railway Bridge (ch210)",        cat:"bridge",     dur:90, deps:["TW02"],                   baseDur:90,  pct:0 },
+  { id:"BR02", label:"Shelford Road Bridge (ch920)",  cat:"bridge",     dur:80, deps:["TW01"],                   baseDur:80,  pct:0 },
+  { id:"BR03", label:"River Trent Bridge (ch1500)",   cat:"bridge",     dur:120,deps:["TW01"],                   baseDur:120, pct:0 },
+  { id:"CW01", label:"Capping Layer",                cat:"carriageway",dur:20, deps:["EW01","EW02","EW03","EW04","EW05"], baseDur:20, pct:0 },
+  { id:"CW02", label:"Sub-base",                     cat:"carriageway",dur:20, deps:["CW01"],                   baseDur:20,  pct:0 },
+  { id:"CW03", label:"Lower Base (CBGM)",            cat:"carriageway",dur:15, deps:["CW02"],                   baseDur:15,  pct:0 },
+  { id:"CW04", label:"Upper Base (Asphalt)",         cat:"carriageway",dur:15, deps:["CW03"],                   baseDur:15,  pct:0 },
+  { id:"CW05", label:"Binder Course",                cat:"carriageway",dur:12, deps:["CW04"],                   baseDur:12,  pct:0 },
+  { id:"CW06", label:"Surface Course",               cat:"carriageway",dur:10, deps:["CW05"],                   baseDur:10,  pct:0 },
+  { id:"FN01", label:"Crash Barriers + Kerbs",       cat:"finishing",  dur:15, deps:["CW04"],                   baseDur:15,  pct:0 },
+  { id:"FN02", label:"White-lining & Road Studs",    cat:"finishing",  dur:5,  deps:["CW06","FN01"],            baseDur:5,   pct:0 },
+  { id:"FN03", label:"Road Signs",                   cat:"finishing",  dur:5,  deps:["CW06"],                   baseDur:5,   pct:0 },
+  { id:"FN04", label:"Fencing",                      cat:"finishing",  dur:20, deps:["EW01","EW02","EW03","EW04","EW05"], baseDur:20, pct:0 },
+];
+
+// Rainfall (Nottingham, monthly mean mm/month → mm/day approx)
+const RAINFALL_MONTHLY = [1.9,1.4,1.5,1.6,1.7,1.8,1.8,2.0,1.9,2.0,2.0,1.9]; // mm/day mean
+
+// ---- PROFILE DATA (sample, 201 points ch0-4000 at 20m intervals) ----
+// Using computed values from the Profiles.xlsx data
+function generateProfileData() {
+  const data = [];
+  // Key values from spreadsheet (sampled)
+  const samples = [
+    [0,35.0,35.0],[200,36.71,37.08],[400,38.83,39.64],[600,41.38,42.21],
+    [800,43.68,44.61],[920,44.80,45.46],[1000,45.73,46.24],[1200,47.15,47.63],
+    [1400,48.12,48.81],[1500,38.2,49.24],[1600,49.4,49.87],[1800,50.1,50.82],
+    [2000,50.6,51.49],[2200,51.0,51.86],[2400,51.3,52.06],[2600,51.5,52.05],
+    [2800,51.6,51.82],[3000,51.5,51.38],[3200,51.2,50.72],[3400,50.7,49.83],
+    [3600,49.9,48.71],[3800,48.8,47.35],[4000,25.0,28.03],
+  ];
+  for(let ch=0;ch<=4000;ch+=20){
+    let prev=samples[0],next=samples[samples.length-1];
+    for(let i=0;i<samples.length-1;i++){
+      if(ch>=samples[i][0]&&ch<=samples[i+1][0]){prev=samples[i];next=samples[i+1];break;}
+    }
+    const t=(ch-prev[0])/(next[0]-prev[0]||1);
+    const eg=prev[1]+(next[1]-prev[1])*t;
+    const frl=prev[2]+(next[2]-prev[2])*t;
+    data.push({ch,eg:+eg.toFixed(3),frl:+frl.toFixed(3)});
+  }
+  return data;
+}
+
+// ============================================================
+//  SCREEN NAVIGATION
+// ============================================================
+function showScreen(name) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('screen-'+name).classList.add('active');
+  document.getElementById('nav-'+name).classList.add('active');
+  if(name==='profile') renderProfileChart();
+  if(name==='resources') renderResourceTables();
+  if(name==='programme') renderGantt();
+  if(name==='decisions') renderDecisions();
+}
+
+function scrollToRun(){
+  setTimeout(()=>document.getElementById('runAnchor').scrollIntoView({behavior:'smooth'}),100);
+}
+
+// ============================================================
+//  INITIALISE
+// ============================================================
+function init() {
+  state.workPackages = WORK_PACKAGES.map(wp=>({...wp,pct:0,startDay:null,endDay:null}));
+  state.profileData = generateProfileData();
+
+  // Default plant allocation
+  const earthKeys = ['excavator','dumpTruck','dozer','grader','roller','engineer','foreman','labourer'];
+  const structKeys = ['backhoe','smallCrane','pileDriver','waterPump','largeCrane','concretePump','van','flatbed','foreman'];
+  state.plantAlloc = {};
+  [...earthKeys,...structKeys].forEach(k=>{state.plantAlloc[k]=0;});
+  state.plantAlloc['excavator']=2;
+  state.plantAlloc['dumpTruck']=4;
+  state.plantAlloc['dozer']=1;
+  state.plantAlloc['roller']=1;
+  state.plantAlloc['engineer']=2;
+  state.plantAlloc['foreman']=2;
+  state.plantAlloc['labourer']=4;
+  state.plantAlloc['van']=2;
+
+  // Compute baseline start/end for Gantt
+  computeBaseline();
+  renderGantt();
+  renderDashboard();
+  initScurveChart();
+  updateSidebar();
+}
+
+function computeBaseline() {
+  const finishMap={};
+  const startMap={};
+  function getFinish(id){
+    if(finishMap[id]!==undefined) return finishMap[id];
+    const wp=state.workPackages.find(w=>w.id===id);
+    if(!wp) return 0;
+    const depFinish=wp.deps.length?Math.max(...wp.deps.map(d=>getFinish(d))):0;
+    startMap[id]=depFinish;
+    finishMap[id]=depFinish+wp.baseDur;
+    return finishMap[id];
+  }
+  state.workPackages.forEach(wp=>{
+    getFinish(wp.id);
+    wp.baseStart=startMap[wp.id]||0;
+    wp.baseEnd=finishMap[wp.id]||wp.baseDur;
+  });
+}
+
+// ============================================================
+//  GANTT
+// ============================================================
+const CAT_COLORS={temp:'#2a6fcf',earthworks:'#c47c1a',drainage:'#1a8a66',bridge:'#9a3ab8',carriageway:'#4a5ab8',finishing:'#2a8c3a'};
+const CAT_TAGS={temp:'tag-temp',earthworks:'tag-earth',drainage:'tag-drain',bridge:'tag-bridge',carriageway:'tag-carry',finishing:'tag-finish'};
+
+function renderGantt(){
+  const tbody=document.getElementById('ganttBody');
+  if(!tbody) return;
+  tbody.innerHTML='';
+  const SCALE=400;
+  state.workPackages.forEach(wp=>{
+    const pct=Math.round(wp.pct||0);
+    const isActive=wp.pct>0&&wp.pct<100;
+    const isDone=wp.pct>=100;
+    const barLeft=((wp.baseStart/SCALE)*100).toFixed(1);
+    const barW=Math.max(((wp.baseDur/SCALE)*100),0.5).toFixed(1);
+    const dotCls=isDone?'dot-green':isActive?'dot-amber':wp.baseStart<=state.currentDay?'dot-blue':'dot-gray';
+    const tr=document.createElement('tr');
+    tr.className='gantt-row';
+    tr.innerHTML=`
+      <td style="font-size:11px;color:var(--muted);font-weight:600;">${wp.id}</td>
+      <td style="font-size:12px;"><span class="status-dot ${dotCls}"></span>${wp.label}</td>
+      <td><span class="tag ${CAT_TAGS[wp.cat]}">${wp.cat.substring(0,5)}</span></td>
+      <td style="text-align:center;color:var(--muted);">${wp.baseDur}d</td>
+      <td style="text-align:center;color:var(--muted);">${wp.baseStart}</td>
+      <td style="text-align:center;color:var(--muted);">${wp.baseEnd}</td>
+      <td style="text-align:center;font-weight:600;color:${isDone?'var(--green)':isActive?'var(--amber)':'var(--hint)'};">${pct}%</td>
+      <td class="gantt-bar-cell">
+        <div class="gantt-row-bar" style="position:relative;">
+          <div style="position:absolute;left:${barLeft}%;width:${barW}%;top:2px;height:16px;">
+            <div style="background:${CAT_COLORS[wp.cat]};opacity:0.25;height:16px;border-radius:3px;position:absolute;width:100%;"></div>
+            <div style="background:${CAT_COLORS[wp.cat]};height:16px;border-radius:3px;position:absolute;width:${pct}%;"></div>
+            ${state.currentDay>0?`<div style="position:absolute;left:${Math.min((state.currentDay/SCALE)*100/parseFloat(barW)*100,100)}%;top:0;width:2px;height:16px;background:white;opacity:0.7;"></div>`:''}
+          </div>
+          <div style="position:absolute;left:${((state.currentDay/SCALE)*100).toFixed(1)}%;top:0;width:1.5px;height:20px;background:var(--red);opacity:0.7;"></div>
+        </div>
+      </td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+// ============================================================
+//  PROFILE CHART
+// ============================================================
+function renderProfileChart(){
+  const ctx=document.getElementById('profileChart');
+  if(!ctx) return;
+  if(state.charts.profile) state.charts.profile.destroy();
+  const chainages=state.profileData.map(d=>d.ch);
+  const eg=state.profileData.map(d=>d.eg);
+  const frl=state.profileData.map(d=>d.frl);
+  state.charts.profile=new Chart(ctx,{
+    type:'line',
+    data:{
+      labels:chainages,
+      datasets:[
+        {label:'Existing Ground Level',data:eg,borderColor:'#f59e0b',backgroundColor:'rgba(245,158,11,0.08)',borderWidth:1.5,pointRadius:0,fill:true},
+        {label:'Finished Road Level (FRL)',data:frl,borderColor:'#4f8ef7',backgroundColor:'rgba(79,142,247,0.08)',borderWidth:2,pointRadius:0,fill:true},
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{labels:{color:'#8890b5',boxWidth:12,font:{size:11}}}},
+      scales:{
+        x:{ticks:{color:'#555d85',maxTicksLimit:10,callback:v=>v+'m'},grid:{color:'#2e3450'},title:{display:true,text:'Chainage (m)',color:'#8890b5'}},
+        y:{ticks:{color:'#555d85'},grid:{color:'#2e3450'},title:{display:true,text:'Level AOD (m)',color:'#8890b5'}}
+      }
+    }
+  });
+}
+
+// ============================================================
+//  DECISIONS SCREEN
+// ============================================================
+const EARTH_PLANT=['excavator','dumpTruck','tipperTruck','dozer','grader','roller','engineer','foreman','labourer'];
+const STRUCT_PLANT=['backhoe','smallCrane','largeCrane','pileDriver','concretePump','waterPump','paver','sprayer','flatbed','van'];
+
+function renderDecisions(){
+  renderPlantTable('plantEarthworks', EARTH_PLANT);
+  renderPlantTable('plantStructures', STRUCT_PLANT);
+  updateCostPreview();
+  renderActivePackages();
+}
+
+function renderPlantTable(divId, keys){
+  const div=document.getElementById(divId);
+  if(!div) return;
+  div.innerHTML='';
+  keys.forEach(k=>{
+    const p=PLANT_RATES[k];
+    if(!p) return;
+    const n=state.plantAlloc[k]||0;
+    const row=document.createElement('div');
+    row.className='resource-row';
+    row.innerHTML=`
+      <div style="color:var(--text)">${p.label}</div>
+      <div style="text-align:center">
+        <input class="number-input" type="number" min="0" max="20" value="${n}" step="1" style="width:60px"
+          onchange="setPlant('${k}',this.value)" oninput="setPlant('${k}',this.value)">
+      </div>
+      <div style="text-align:center;color:var(--muted);">£${p.wd.toLocaleString()}</div>
+      <div class="cost-preview" id="pcost-${k}" style="text-align:right;">£${(n*p.wd*1).toLocaleString()}</div>`;
+    div.appendChild(row);
+  });
+}
+
+function setPlant(key, val){
+  state.plantAlloc[key]=Math.max(0,parseInt(val)||0);
+  const p=PLANT_RATES[key];
+  const pd=document.getElementById('pcost-'+key);
+  if(pd) pd.textContent='£'+(state.plantAlloc[key]*p.wd).toLocaleString();
+  updateCostPreview();
+}
+
+function updateCostPreview(){
+  const days=parseInt(document.getElementById('periodLength')?.value)||5;
+  let plantCost=0;
+  Object.keys(state.plantAlloc).forEach(k=>{
+    const n=state.plantAlloc[k]||0;
+    const r=PLANT_RATES[k]?.wd||0;
+    plantCost+=n*r*days;
+  });
+  const matEst=plantCost*0.35;
+  document.getElementById('prev-plant').textContent='£'+Math.round(plantCost).toLocaleString();
+  document.getElementById('prev-mat').textContent='£'+Math.round(matEst).toLocaleString();
+  document.getElementById('prev-total').textContent='£'+Math.round(plantCost+matEst).toLocaleString();
+}
+
+function renderActivePackages(){
+  const div=document.getElementById('activePackages');
+  if(!div) return;
+  const active=state.workPackages.filter(wp=>{
+    const depsOk=wp.deps.every(d=>state.workPackages.find(w=>w.id===d)?.pct>=100);
+    return (wp.pct<100) && (wp.deps.length===0||depsOk);
+  });
+  if(!active.length){div.innerHTML='<div style="color:var(--hint)">No packages available yet.</div>';return;}
+  div.innerHTML=active.map(wp=>`
+    <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)">
+      <span class="tag ${CAT_TAGS[wp.cat]}">${wp.id}</span>
+      <span style="flex:1;font-size:12px;">${wp.label}</span>
+      <span style="font-size:11px;color:var(--muted)">${Math.round(wp.pct||0)}%</span>
+    </div>`).join('');
+}
+
+// ============================================================
+//  SIMULATION ENGINE
+// ============================================================
+function runPeriod(){
+  const periodDays=Math.min(20,Math.max(1,parseInt(document.getElementById('periodLength').value)||5));
+  const rainThreshold=parseFloat(document.getElementById('rainThreshold').value)||10;
+  const focus=document.getElementById('focusArea').value;
+
+  state.currentPeriod++;
+  const periodStart=state.currentDay;
+  const periodEnd=state.currentDay+periodDays;
+  const events=[];
+  let periodCost=0;
+  let weatherLostDays=0;
+
+  // --- RAINFALL SIMULATION (monthly mean ≈ mm/day) ---
+  const monthIdx=((new Date('2025-03-01').getMonth()+Math.floor(state.currentDay/22))%12);
+  const rainMean=RAINFALL_MONTHLY[monthIdx];
+  const rainStd=rainMean*0.5;
+  let totalRainDays=0;
+  let weatherDays=[];
+  for(let d=0;d<periodDays;d++){
+    const rain=Math.max(0,rainMean+rainStd*(Math.random()*2-1));
+    weatherDays.push({day:d+1,rain:+rain.toFixed(1)});
+    if(rain>rainThreshold) totalRainDays++;
+  }
+  const effectiveDays=periodDays-totalRainDays;
+  if(totalRainDays>0) events.push(`🌧 ${totalRainDays} rain day(s) stopped earthworks (>${rainThreshold}mm threshold)`);
+
+  // --- PLANT COST ---
+  let plantCost=0;
+  Object.keys(state.plantAlloc).forEach(k=>{
+    const n=state.plantAlloc[k]||0;
+    const r=PLANT_RATES[k]?.wd||0;
+    plantCost+=n*r*periodDays;
+  });
+
+  // --- EQUIPMENT BREAKDOWNS ---
+  const breakdownProb={excavator:0.05,dumpTruck:0.06,dozer:0.05,pileDriver:0.05,paver:0.05};
+  let breakdownLost=0;
+  Object.keys(breakdownProb).forEach(k=>{
+    const n=state.plantAlloc[k]||0;
+    for(let i=0;i<n;i++){
+      if(Math.random()<breakdownProb[k]*periodDays/5){
+        breakdownLost+=1;
+        events.push(`🔧 ${PLANT_RATES[k].label} breakdown — 1 day lost`);
+      }
+    }
+  });
+
+  // --- PROGRESS ON WORK PACKAGES ---
+  const prodVariance=1+(Math.random()*0.3-0.15);
+  const earthEfficiency=(effectiveDays/Math.max(periodDays,1))*prodVariance;
+  const structEfficiency=prodVariance;
+
+  const earthCats=['temp','earthworks','drainage'];
+  const structCats=['bridge','carriageway','finishing'];
+
+  state.workPackages.forEach(wp=>{
+    const depsOk=wp.deps.every(d=>state.workPackages.find(w=>w.id===d)?.pct>=100);
+    if(wp.pct>=100) return;
+    if(wp.deps.length>0 && !depsOk) return;
+
+    const isEarth=earthCats.includes(wp.cat);
+    const eff=isEarth?earthEfficiency:structEfficiency;
+    const hasResources=checkResources(wp.cat, focus);
+
+    if(!hasResources) return;
+    if(wp.startDay===null) wp.startDay=state.currentDay;
+
+    const baseAdvance=(periodDays/wp.baseDur)*100;
+    const advance=baseAdvance*eff*(isEarth?1:0.85);
+    wp.pct=Math.min(100, (wp.pct||0)+advance);
+    if(wp.pct>=100){ wp.endDay=periodEnd; events.push(`✅ ${wp.label} — COMPLETE`); }
+  });
+
+  // --- MATERIAL COST ESTIMATE ---
+  const matCost=plantCost*0.32+(Math.random()*0.08*plantCost);
+  const overhead=2500*Math.ceil(periodDays/5);
+
+  periodCost=plantCost+matCost+overhead;
+  state.totalCost+=periodCost;
+  state.currentDay=periodEnd;
+
+  // --- OVERALL PROGRESS ---
+  const overallPct=state.workPackages.reduce((a,wp)=>a+(wp.pct||0),0)/state.workPackages.length;
+  const earnedValue=CONTRACT_VALUE*(overallPct/100);
+  const cpi=state.totalCost>0?earnedValue/state.totalCost:0;
+
+  // --- LOG ---
+  const logEntry={period:state.currentPeriod,days:periodDays,startDay:periodStart,endDay:periodEnd,cost:periodCost,cumCost:state.totalCost,ev:earnedValue,cpi,pct:overallPct,events,weatherDays};
+  state.periods.push(logEntry);
+  addLog(logEntry);
+
+  // --- UPDATE UI ---
+  updateDashboard(overallPct,earnedValue,cpi);
+  updateSidebar();
+  renderGantt();
+  updateScurve();
+  updateReports();
+  renderDecisions();
+
+  // Show dashboard
+  showScreen('dashboard');
+}
+
+function checkResources(cat, focus){
+  const earthKeys=['excavator','dumpTruck','dozer','roller'];
+  const bridgeKeys=['backhoe','smallCrane','pileDriver'];
+  const carryKeys=['paver','roller'];
+  if(cat==='earthworks'||cat==='temp'||cat==='drainage'){
+    const total=earthKeys.reduce((a,k)=>a+(state.plantAlloc[k]||0),0);
+    return total>0;
+  }
+  if(cat==='bridge'){
+    const total=bridgeKeys.reduce((a,k)=>a+(state.plantAlloc[k]||0),0);
+    return total>0;
+  }
+  if(cat==='carriageway'){
+    const total=carryKeys.reduce((a,k)=>a+(state.plantAlloc[k]||0),0);
+    return total>0;
+  }
+  return true;
+}
+
+// ============================================================
+//  UI UPDATES
+// ============================================================
+function updateDashboard(pct,ev,cpi){
+  const days=state.currentDay;
+  document.getElementById('m-days').textContent=days;
+  document.getElementById('m-cost').textContent='£'+Math.round(state.totalCost).toLocaleString();
+  document.getElementById('m-ev').textContent='£'+Math.round(ev).toLocaleString();
+  const cpiEl=document.getElementById('m-cpi');
+  cpiEl.textContent=cpi.toFixed(2);
+  cpiEl.className='metric-value '+(cpi>=1?'good':cpi>=0.85?'warn':'bad');
+  document.getElementById('periodLabel').textContent=`Period ${state.currentPeriod} — Day ${days}`;
+
+  // Activity bars
+  const catOrder=['temp','earthworks','drainage','bridge','carriageway','finishing'];
+  const catLabel={temp:'Temp Works',earthworks:'Earthworks',drainage:'Drainage',bridge:'Bridges',carriageway:'Carriageway',finishing:'Finishing'};
+  const catColor={temp:'#2a6fcf',earthworks:'#c47c1a',drainage:'#1a8a66',bridge:'#9a3ab8',carriageway:'#4a5ab8',finishing:'#2a8c3a'};
+  const div=document.getElementById('activityBars');
+  div.innerHTML=catOrder.map(cat=>{
+    const wps=state.workPackages.filter(w=>w.cat===cat);
+    const avgPct=wps.reduce((a,w)=>a+(w.pct||0),0)/(wps.length||1);
+    return `<div style="margin-bottom:10px;">
+      <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;">
+        <span style="color:var(--text)">${catLabel[cat]}</span>
+        <span style="color:var(--muted)">${Math.round(avgPct)}%</span>
+      </div>
+      <div class="progress-wrap"><div class="progress-fill" style="width:${avgPct}%;background:${catColor[cat]}"></div></div>
+    </div>`;
+  }).join('');
+
+  // Weather display
+  const last=state.periods[state.periods.length-1];
+  if(last){
+    const days=last.weatherDays||[];
+    const maxRain=Math.max(...days.map(d=>d.rain));
+    const icon=maxRain>15?'⛈':maxRain>5?'🌦':'☀';
+    document.getElementById('weatherBadge').textContent=icon+' '+(maxRain>15?'Wet':maxRain>5?'Mixed':'Dry');
+    document.getElementById('weatherDisplay').innerHTML=`
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+        <div style="font-size:28px;">${icon}</div>
+        <div>
+          <div style="font-size:14px;font-weight:600;">Period ${last.period} Weather</div>
+          <div style="font-size:12px;color:var(--muted);">Max: ${maxRain.toFixed(1)}mm/day · Threshold: ${document.getElementById('rainThreshold')?.value||10}mm</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:3px;">${days.slice(0,10).map(d=>{
+        const h=Math.min(40,d.rain*4);
+        const col=d.rain>10?'var(--red)':d.rain>5?'var(--amber)':'var(--accent)';
+        return `<div style="flex:1;height:40px;background:var(--bg3);border-radius:3px;position:relative;overflow:hidden;" title="Day ${d.day}: ${d.rain}mm">
+          <div style="position:absolute;bottom:0;left:0;right:0;height:${h}px;background:${col};opacity:0.7;border-radius:3px;"></div>
+        </div>`;
+      }).join('')}</div>
+      <div style="font-size:11px;color:var(--hint);margin-top:4px;">Rain intensity (first ${Math.min(days.length,10)} days of period)</div>`;
+  }
+}
+
+function addLog(entry){
+  const div=document.getElementById('logWrap');
+  const txt=document.createElement('div');
+  txt.className='log-entry';
+  txt.innerHTML=`<span class="log-day">Period ${entry.period} (Day ${entry.startDay}→${entry.endDay})</span> — Cost: £${Math.round(entry.cost).toLocaleString()} | Progress: ${entry.pct.toFixed(1)}% | CPI: ${entry.cpi.toFixed(2)}`;
+  div.insertBefore(txt,div.firstChild);
+  entry.events.forEach(e=>{
+    const ev=document.createElement('div');
+    ev.className='log-entry '+(e.startsWith('✅')?'log-good':e.startsWith('🌧')?'log-warn':e.startsWith('🔧')?'log-warn':'');
+    ev.innerHTML='&nbsp;&nbsp;'+e;
+    div.insertBefore(ev,div.firstChild);
+  });
+  // Update status
+  const late=state.currentDay>CONTRACT_DAYS;
+  document.getElementById('statusBadge').textContent=late?'Overrun':entry.pct>=100?'Complete':'In Progress';
+  document.getElementById('statusBadge').className='badge '+(late?'badge-danger':entry.pct>=100?'badge-success':'badge-warn');
+  document.getElementById('dayBadge').textContent='Day '+state.currentDay;
+}
+
+function updateSidebar(){
+  const pct=state.workPackages.reduce((a,w)=>a+(w.pct||0),0)/state.workPackages.length;
+  document.getElementById('overallProgress').style.width=pct.toFixed(1)+'%';
+  document.getElementById('overallPct').textContent=pct.toFixed(1)+'% complete';
+  const remaining=CONTRACT_VALUE-state.totalCost;
+  const el=document.getElementById('sidebudget');
+  el.textContent='£'+Math.max(0,Math.round(remaining)).toLocaleString();
+  el.style.color=remaining<0?'var(--red)':remaining<2000000?'var(--amber)':'var(--green)';
+}
+
+function renderDashboard(){
+  updateDashboard(0,0,0);
+}
+
+// ============================================================
+//  CHARTS
+// ============================================================
+function initScurveChart(){
+  const ctx=document.getElementById('scurveChart');
+  if(!ctx) return;
+  state.charts.scurve=new Chart(ctx,{
+    type:'line',
+    data:{
+      labels:[0],
+      datasets:[
+        {label:'Actual Cost (AC)',data:[0],borderColor:'#ef4444',backgroundColor:'rgba(239,68,68,0.1)',tension:0.3,fill:true,pointRadius:3},
+        {label:'Earned Value (EV)',data:[0],borderColor:'#22c55e',backgroundColor:'rgba(34,197,94,0.1)',tension:0.3,fill:true,pointRadius:3},
+        {label:'Planned Value (PV)',data:[0],borderColor:'#4f8ef7',backgroundColor:'rgba(79,142,247,0.05)',tension:0.3,fill:false,pointRadius:0,borderDash:[5,3]},
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{labels:{color:'#8890b5',boxWidth:10,font:{size:11}}}},
+      scales:{
+        x:{ticks:{color:'#555d85'},grid:{color:'#2e3450'},title:{display:true,text:'Project Day',color:'#8890b5'}},
+        y:{ticks:{color:'#555d85',callback:v=>v>=1e6?'£'+(v/1e6).toFixed(1)+'M':'£'+v.toLocaleString()},grid:{color:'#2e3450'},title:{display:true,text:'Value (£)',color:'#8890b5'}}
+      }
+    }
+  });
+}
+
+function updateScurve(){
+  if(!state.charts.scurve) return;
+  const ch=state.charts.scurve;
+  ch.data.labels=state.periods.map(p=>p.endDay);
+  ch.data.datasets[0].data=state.periods.map(p=>Math.round(p.cumCost));
+  ch.data.datasets[1].data=state.periods.map(p=>Math.round(p.ev));
+  // Linear PV baseline
+  ch.data.datasets[2].data=state.periods.map(p=>Math.round(CONTRACT_VALUE*(p.endDay/CONTRACT_DAYS)));
+  ch.update();
+}
+
+// ============================================================
+//  RESOURCE TABLES
+// ============================================================
+function renderResourceTables(){
+  const pt=document.getElementById('plantTable');
+  if(!pt) return;
+  pt.innerHTML=`<thead><tr><th>Equipment</th><th>Weekday Rate</th><th>Weekend Rate</th></tr></thead>`;
+  const tb=document.createElement('tbody');
+  Object.values(PLANT_RATES).forEach(p=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${p.label}</td><td>£${p.wd.toLocaleString()}/day</td><td>£${p.we.toLocaleString()}/day</td>`;
+    tb.appendChild(tr);
+  });
+  pt.appendChild(tb);
+
+  const mt=document.getElementById('matTable');
+  mt.innerHTML=`<thead><tr><th>Material</th><th>Rate</th><th>Unit</th></tr></thead>`;
+  const tb2=document.createElement('tbody');
+  MATERIAL_RATES.forEach(m=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${m.label}</td><td>£${m.rate.toLocaleString()}</td><td>${m.unit}</td>`;
+    tb2.appendChild(tr);
+  });
+  mt.appendChild(tb2);
+}
+
+// ============================================================
+//  REPORTS
+// ============================================================
+function updateReports(){
+  const tbody=document.getElementById('reportBody');
+  if(!tbody) return;
+  tbody.innerHTML='';
+  state.periods.forEach(p=>{
+    const tr=document.createElement('tr');
+    const cpiCol=p.cpi>=1?'var(--green)':p.cpi>=0.85?'var(--amber)':'var(--red)';
+    tr.innerHTML=`
+      <td style="font-weight:600">${p.period}</td>
+      <td>${p.startDay}–${p.endDay}</td>
+      <td>£${Math.round(p.cost).toLocaleString()}</td>
+      <td>£${Math.round(p.cumCost).toLocaleString()}</td>
+      <td>£${Math.round(p.ev).toLocaleString()}</td>
+      <td style="color:${cpiCol};font-weight:600">${p.cpi.toFixed(2)}</td>
+      <td>${p.pct.toFixed(1)}%</td>
+      <td style="font-size:11px;color:var(--muted)">${p.events.slice(0,2).join(' | ')||'—'}</td>`;
+    tbody.insertBefore(tr,tbody.firstChild);
+  });
+  const note=tbody.nextElementSibling;
+  if(note) note.style.display=state.periods.length?'none':'block';
+
+  // Productivity summary
+  const div=document.getElementById('productivitySummary');
+  if(!div||!state.periods.length) return;
+  const avgCpi=state.periods.reduce((a,p)=>a+p.cpi,0)/state.periods.length;
+  const totalPct=state.workPackages.reduce((a,w)=>a+(w.pct||0),0)/state.workPackages.length;
+  const complete=state.workPackages.filter(w=>w.pct>=100).length;
+  div.innerHTML=`
+    <div class="card-grid card-grid-3" style="margin-bottom:0">
+      <div class="metric"><div class="metric-label">Avg CPI</div><div class="metric-value ${avgCpi>=1?'good':avgCpi>=0.85?'warn':'bad'}">${avgCpi.toFixed(2)}</div><div class="metric-sub">(target ≥ 1.00)</div></div>
+      <div class="metric"><div class="metric-label">Packages Complete</div><div class="metric-value">${complete} / ${state.workPackages.length}</div></div>
+      <div class="metric"><div class="metric-label">Overall Progress</div><div class="metric-value good">${totalPct.toFixed(1)}%</div><div class="metric-sub">weighted average</div></div>
+    </div>`;
+}
+
+// ============================================================
+//  BOOT
+// ============================================================
+window.addEventListener('load', init);
+</script>
+</body>
+</html>

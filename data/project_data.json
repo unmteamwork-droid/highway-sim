@@ -1,0 +1,1512 @@
+{
+  "profile": [
+    {
+      "chainage": 0,
+      "existing_aod": 35.0,
+      "frl_aod": 35.0,
+      "cut_depth": 0.0
+    },
+    {
+      "chainage": 20,
+      "existing_aod": 35.043,
+      "frl_aod": 35.083,
+      "cut_depth": -0.04
+    },
+    {
+      "chainage": 40,
+      "existing_aod": 35.131,
+      "frl_aod": 35.219,
+      "cut_depth": -0.088
+    },
+    {
+      "chainage": 60,
+      "existing_aod": 35.25,
+      "frl_aod": 35.386,
+      "cut_depth": -0.137
+    },
+    {
+      "chainage": 80,
+      "existing_aod": 35.396,
+      "frl_aod": 35.578,
+      "cut_depth": -0.182
+    },
+    {
+      "chainage": 100,
+      "existing_aod": 35.566,
+      "frl_aod": 35.79,
+      "cut_depth": -0.224
+    },
+    {
+      "chainage": 120,
+      "existing_aod": 35.757,
+      "frl_aod": 36.019,
+      "cut_depth": -0.262
+    },
+    {
+      "chainage": 140,
+      "existing_aod": 35.969,
+      "frl_aod": 36.265,
+      "cut_depth": -0.296
+    },
+    {
+      "chainage": 160,
+      "existing_aod": 36.2,
+      "frl_aod": 36.525,
+      "cut_depth": -0.325
+    },
+    {
+      "chainage": 180,
+      "existing_aod": 36.449,
+      "frl_aod": 36.798,
+      "cut_depth": -0.35
+    },
+    {
+      "chainage": 200,
+      "existing_aod": 36.715,
+      "frl_aod": 37.084,
+      "cut_depth": -0.37
+    },
+    {
+      "chainage": 220,
+      "existing_aod": 32.2,
+      "frl_aod": 37.382,
+      "cut_depth": -5.182
+    },
+    {
+      "chainage": 240,
+      "existing_aod": 37.295,
+      "frl_aod": 37.69,
+      "cut_depth": -0.395
+    },
+    {
+      "chainage": 260,
+      "existing_aod": 37.609,
+      "frl_aod": 38.009,
+      "cut_depth": -0.401
+    },
+    {
+      "chainage": 280,
+      "existing_aod": 37.937,
+      "frl_aod": 38.338,
+      "cut_depth": -0.401
+    },
+    {
+      "chainage": 300,
+      "existing_aod": 38.28,
+      "frl_aod": 38.677,
+      "cut_depth": -0.397
+    },
+    {
+      "chainage": 320,
+      "existing_aod": 38.637,
+      "frl_aod": 39.025,
+      "cut_depth": -0.388
+    },
+    {
+      "chainage": 340,
+      "existing_aod": 39.007,
+      "frl_aod": 39.381,
+      "cut_depth": -0.374
+    },
+    {
+      "chainage": 360,
+      "existing_aod": 39.391,
+      "frl_aod": 39.746,
+      "cut_depth": -0.355
+    },
+    {
+      "chainage": 380,
+      "existing_aod": 39.788,
+      "frl_aod": 40.119,
+      "cut_depth": -0.331
+    },
+    {
+      "chainage": 400,
+      "existing_aod": 40.198,
+      "frl_aod": 40.501,
+      "cut_depth": -0.303
+    },
+    {
+      "chainage": 420,
+      "existing_aod": 40.6,
+      "frl_aod": 40.889,
+      "cut_depth": -0.289
+    },
+    {
+      "chainage": 440,
+      "existing_aod": 41.19,
+      "frl_aod": 41.286,
+      "cut_depth": -0.096
+    },
+    {
+      "chainage": 460,
+      "existing_aod": 41.763,
+      "frl_aod": 41.689,
+      "cut_depth": 0.074
+    },
+    {
+      "chainage": 480,
+      "existing_aod": 42.319,
+      "frl_aod": 42.1,
+      "cut_depth": 0.219
+    },
+    {
+      "chainage": 500,
+      "existing_aod": 42.857,
+      "frl_aod": 42.485,
+      "cut_depth": 0.373
+    },
+    {
+      "chainage": 520,
+      "existing_aod": 43.378,
+      "frl_aod": 42.851,
+      "cut_depth": 0.528
+    },
+    {
+      "chainage": 540,
+      "existing_aod": 43.881,
+      "frl_aod": 43.197,
+      "cut_depth": 0.684
+    },
+    {
+      "chainage": 560,
+      "existing_aod": 44.366,
+      "frl_aod": 43.523,
+      "cut_depth": 0.842
+    },
+    {
+      "chainage": 580,
+      "existing_aod": 44.832,
+      "frl_aod": 43.828,
+      "cut_depth": 1.003
+    },
+    {
+      "chainage": 600,
+      "existing_aod": 45.279,
+      "frl_aod": 44.112,
+      "cut_depth": 1.168
+    },
+    {
+      "chainage": 620,
+      "existing_aod": 45.707,
+      "frl_aod": 44.371,
+      "cut_depth": 1.336
+    },
+    {
+      "chainage": 640,
+      "existing_aod": 46.116,
+      "frl_aod": 44.606,
+      "cut_depth": 1.51
+    },
+    {
+      "chainage": 660,
+      "existing_aod": 46.505,
+      "frl_aod": 44.815,
+      "cut_depth": 1.69
+    },
+    {
+      "chainage": 680,
+      "existing_aod": 46.873,
+      "frl_aod": 44.994,
+      "cut_depth": 1.879
+    },
+    {
+      "chainage": 700,
+      "existing_aod": 47.221,
+      "frl_aod": 45.14,
+      "cut_depth": 2.081
+    },
+    {
+      "chainage": 720,
+      "existing_aod": 47.547,
+      "frl_aod": 45.247,
+      "cut_depth": 2.299
+    },
+    {
+      "chainage": 740,
+      "existing_aod": 47.85,
+      "frl_aod": 45.3,
+      "cut_depth": 2.55
+    },
+    {
+      "chainage": 760,
+      "existing_aod": 48.132,
+      "frl_aod": 45.264,
+      "cut_depth": 2.868
+    },
+    {
+      "chainage": 780,
+      "existing_aod": 48.389,
+      "frl_aod": 45.16,
+      "cut_depth": 3.23
+    },
+    {
+      "chainage": 800,
+      "existing_aod": 48.622,
+      "frl_aod": 45.0,
+      "cut_depth": 3.622
+    },
+    {
+      "chainage": 820,
+      "existing_aod": 48.83,
+      "frl_aod": 44.804,
+      "cut_depth": 4.025
+    },
+    {
+      "chainage": 840,
+      "existing_aod": 49.01,
+      "frl_aod": 44.596,
+      "cut_depth": 4.414
+    },
+    {
+      "chainage": 860,
+      "existing_aod": 49.161,
+      "frl_aod": 44.4,
+      "cut_depth": 4.761
+    },
+    {
+      "chainage": 880,
+      "existing_aod": 49.28,
+      "frl_aod": 44.24,
+      "cut_depth": 5.039
+    },
+    {
+      "chainage": 900,
+      "existing_aod": 49.363,
+      "frl_aod": 44.136,
+      "cut_depth": 5.227
+    },
+    {
+      "chainage": 920,
+      "existing_aod": 49.4,
+      "frl_aod": 44.1,
+      "cut_depth": 5.3
+    },
+    {
+      "chainage": 940,
+      "existing_aod": 49.358,
+      "frl_aod": 44.059,
+      "cut_depth": 5.3
+    },
+    {
+      "chainage": 960,
+      "existing_aod": 49.233,
+      "frl_aod": 43.935,
+      "cut_depth": 5.298
+    },
+    {
+      "chainage": 980,
+      "existing_aod": 49.024,
+      "frl_aod": 43.728,
+      "cut_depth": 5.296
+    },
+    {
+      "chainage": 1000,
+      "existing_aod": 48.732,
+      "frl_aod": 43.439,
+      "cut_depth": 5.293
+    },
+    {
+      "chainage": 1020,
+      "existing_aod": 48.356,
+      "frl_aod": 43.067,
+      "cut_depth": 5.289
+    },
+    {
+      "chainage": 1040,
+      "existing_aod": 47.896,
+      "frl_aod": 42.612,
+      "cut_depth": 5.284
+    },
+    {
+      "chainage": 1060,
+      "existing_aod": 47.353,
+      "frl_aod": 42.075,
+      "cut_depth": 5.278
+    },
+    {
+      "chainage": 1080,
+      "existing_aod": 46.726,
+      "frl_aod": 41.455,
+      "cut_depth": 5.271
+    },
+    {
+      "chainage": 1100,
+      "existing_aod": 46.016,
+      "frl_aod": 40.753,
+      "cut_depth": 5.263
+    },
+    {
+      "chainage": 1120,
+      "existing_aod": 45.222,
+      "frl_aod": 39.967,
+      "cut_depth": 5.255
+    },
+    {
+      "chainage": 1140,
+      "existing_aod": 44.345,
+      "frl_aod": 39.099,
+      "cut_depth": 5.245
+    },
+    {
+      "chainage": 1160,
+      "existing_aod": 43.384,
+      "frl_aod": 38.149,
+      "cut_depth": 5.235
+    },
+    {
+      "chainage": 1180,
+      "existing_aod": 42.34,
+      "frl_aod": 37.116,
+      "cut_depth": 5.224
+    },
+    {
+      "chainage": 1200,
+      "existing_aod": 41.212,
+      "frl_aod": 36.0,
+      "cut_depth": 5.212
+    },
+    {
+      "chainage": 1220,
+      "existing_aod": 40.0,
+      "frl_aod": 34.969,
+      "cut_depth": 5.031
+    },
+    {
+      "chainage": 1240,
+      "existing_aod": 38.602,
+      "frl_aod": 34.009,
+      "cut_depth": 4.593
+    },
+    {
+      "chainage": 1260,
+      "existing_aod": 37.233,
+      "frl_aod": 33.12,
+      "cut_depth": 4.113
+    },
+    {
+      "chainage": 1280,
+      "existing_aod": 35.896,
+      "frl_aod": 32.302,
+      "cut_depth": 3.593
+    },
+    {
+      "chainage": 1300,
+      "existing_aod": 34.591,
+      "frl_aod": 31.556,
+      "cut_depth": 3.036
+    },
+    {
+      "chainage": 1320,
+      "existing_aod": 33.322,
+      "frl_aod": 30.88,
+      "cut_depth": 2.442
+    },
+    {
+      "chainage": 1340,
+      "existing_aod": 32.09,
+      "frl_aod": 30.276,
+      "cut_depth": 1.815
+    },
+    {
+      "chainage": 1360,
+      "existing_aod": 30.899,
+      "frl_aod": 29.742,
+      "cut_depth": 1.157
+    },
+    {
+      "chainage": 1380,
+      "existing_aod": 29.752,
+      "frl_aod": 29.28,
+      "cut_depth": 0.472
+    },
+    {
+      "chainage": 1400,
+      "existing_aod": 28.653,
+      "frl_aod": 28.889,
+      "cut_depth": -0.236
+    },
+    {
+      "chainage": 1420,
+      "existing_aod": 27.608,
+      "frl_aod": 28.569,
+      "cut_depth": -0.961
+    },
+    {
+      "chainage": 1440,
+      "existing_aod": 26.624,
+      "frl_aod": 28.32,
+      "cut_depth": -1.696
+    },
+    {
+      "chainage": 1460,
+      "existing_aod": 25.712,
+      "frl_aod": 28.142,
+      "cut_depth": -2.431
+    },
+    {
+      "chainage": 1480,
+      "existing_aod": 24.887,
+      "frl_aod": 28.036,
+      "cut_depth": -3.148
+    },
+    {
+      "chainage": 1500,
+      "existing_aod": 23.6,
+      "frl_aod": 28.0,
+      "cut_depth": -4.4
+    },
+    {
+      "chainage": 1520,
+      "existing_aod": 18.7,
+      "frl_aod": 28.0,
+      "cut_depth": -9.3
+    },
+    {
+      "chainage": 1540,
+      "existing_aod": 19.8,
+      "frl_aod": 28.0,
+      "cut_depth": -8.2
+    },
+    {
+      "chainage": 1560,
+      "existing_aod": 20.1,
+      "frl_aod": 28.0,
+      "cut_depth": -7.9
+    },
+    {
+      "chainage": 1580,
+      "existing_aod": 19.5,
+      "frl_aod": 28.0,
+      "cut_depth": -8.5
+    },
+    {
+      "chainage": 1600,
+      "existing_aod": 23.034,
+      "frl_aod": 28.0,
+      "cut_depth": -4.966
+    },
+    {
+      "chainage": 1620,
+      "existing_aod": 23.034,
+      "frl_aod": 28.0,
+      "cut_depth": -4.966
+    },
+    {
+      "chainage": 1640,
+      "existing_aod": 23.034,
+      "frl_aod": 27.99,
+      "cut_depth": -4.956
+    },
+    {
+      "chainage": 1660,
+      "existing_aod": 23.034,
+      "frl_aod": 27.96,
+      "cut_depth": -4.926
+    },
+    {
+      "chainage": 1680,
+      "existing_aod": 23.05,
+      "frl_aod": 27.91,
+      "cut_depth": -4.859
+    },
+    {
+      "chainage": 1700,
+      "existing_aod": 23.067,
+      "frl_aod": 27.84,
+      "cut_depth": -4.773
+    },
+    {
+      "chainage": 1720,
+      "existing_aod": 23.084,
+      "frl_aod": 27.753,
+      "cut_depth": -4.669
+    },
+    {
+      "chainage": 1740,
+      "existing_aod": 23.101,
+      "frl_aod": 27.649,
+      "cut_depth": -4.548
+    },
+    {
+      "chainage": 1760,
+      "existing_aod": 23.118,
+      "frl_aod": 27.529,
+      "cut_depth": -4.412
+    },
+    {
+      "chainage": 1780,
+      "existing_aod": 23.134,
+      "frl_aod": 27.396,
+      "cut_depth": -4.261
+    },
+    {
+      "chainage": 1800,
+      "existing_aod": 23.151,
+      "frl_aod": 27.25,
+      "cut_depth": -4.099
+    },
+    {
+      "chainage": 1820,
+      "existing_aod": 23.168,
+      "frl_aod": 27.094,
+      "cut_depth": -3.926
+    },
+    {
+      "chainage": 1840,
+      "existing_aod": 23.185,
+      "frl_aod": 26.93,
+      "cut_depth": -3.745
+    },
+    {
+      "chainage": 1860,
+      "existing_aod": 23.202,
+      "frl_aod": 26.76,
+      "cut_depth": -3.559
+    },
+    {
+      "chainage": 1880,
+      "existing_aod": 23.218,
+      "frl_aod": 26.587,
+      "cut_depth": -3.369
+    },
+    {
+      "chainage": 1900,
+      "existing_aod": 23.235,
+      "frl_aod": 26.413,
+      "cut_depth": -3.177
+    },
+    {
+      "chainage": 1920,
+      "existing_aod": 23.252,
+      "frl_aod": 26.24,
+      "cut_depth": -2.987
+    },
+    {
+      "chainage": 1940,
+      "existing_aod": 23.269,
+      "frl_aod": 26.07,
+      "cut_depth": -2.801
+    },
+    {
+      "chainage": 1960,
+      "existing_aod": 23.286,
+      "frl_aod": 25.906,
+      "cut_depth": -2.62
+    },
+    {
+      "chainage": 1980,
+      "existing_aod": 23.303,
+      "frl_aod": 25.75,
+      "cut_depth": -2.447
+    },
+    {
+      "chainage": 2000,
+      "existing_aod": 23.319,
+      "frl_aod": 25.604,
+      "cut_depth": -2.285
+    },
+    {
+      "chainage": 2020,
+      "existing_aod": 23.336,
+      "frl_aod": 25.471,
+      "cut_depth": -2.135
+    },
+    {
+      "chainage": 2040,
+      "existing_aod": 23.353,
+      "frl_aod": 25.351,
+      "cut_depth": -1.998
+    },
+    {
+      "chainage": 2060,
+      "existing_aod": 23.37,
+      "frl_aod": 25.247,
+      "cut_depth": -1.877
+    },
+    {
+      "chainage": 2080,
+      "existing_aod": 23.387,
+      "frl_aod": 25.16,
+      "cut_depth": -1.773
+    },
+    {
+      "chainage": 2100,
+      "existing_aod": 23.403,
+      "frl_aod": 25.09,
+      "cut_depth": -1.687
+    },
+    {
+      "chainage": 2120,
+      "existing_aod": 23.42,
+      "frl_aod": 25.04,
+      "cut_depth": -1.62
+    },
+    {
+      "chainage": 2140,
+      "existing_aod": 23.437,
+      "frl_aod": 25.01,
+      "cut_depth": -1.573
+    },
+    {
+      "chainage": 2160,
+      "existing_aod": 23.454,
+      "frl_aod": 25.0,
+      "cut_depth": -1.546
+    },
+    {
+      "chainage": 2180,
+      "existing_aod": 23.471,
+      "frl_aod": 24.971,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 2200,
+      "existing_aod": 23.487,
+      "frl_aod": 24.987,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 2220,
+      "existing_aod": 23.504,
+      "frl_aod": 25.004,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 2240,
+      "existing_aod": 23.521,
+      "frl_aod": 25.021,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 2260,
+      "existing_aod": 23.538,
+      "frl_aod": 25.038,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 2280,
+      "existing_aod": 23.555,
+      "frl_aod": 25.055,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 2300,
+      "existing_aod": 23.571,
+      "frl_aod": 25.071,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 2320,
+      "existing_aod": 23.588,
+      "frl_aod": 25.088,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 2340,
+      "existing_aod": 23.605,
+      "frl_aod": 25.105,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 2360,
+      "existing_aod": 23.622,
+      "frl_aod": 25.122,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 2380,
+      "existing_aod": 23.639,
+      "frl_aod": 25.139,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 2400,
+      "existing_aod": 23.655,
+      "frl_aod": 25.155,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 2420,
+      "existing_aod": 23.672,
+      "frl_aod": 25.172,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 2440,
+      "existing_aod": 23.689,
+      "frl_aod": 25.189,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 2460,
+      "existing_aod": 23.706,
+      "frl_aod": 25.206,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 2480,
+      "existing_aod": 23.723,
+      "frl_aod": 25.223,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 2500,
+      "existing_aod": 23.739,
+      "frl_aod": 25.239,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 2520,
+      "existing_aod": 23.756,
+      "frl_aod": 25.256,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 2540,
+      "existing_aod": 23.773,
+      "frl_aod": 25.273,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 2560,
+      "existing_aod": 23.79,
+      "frl_aod": 25.29,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 2580,
+      "existing_aod": 23.807,
+      "frl_aod": 25.307,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 2600,
+      "existing_aod": 23.824,
+      "frl_aod": 25.324,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 2620,
+      "existing_aod": 23.84,
+      "frl_aod": 25.34,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 2640,
+      "existing_aod": 23.857,
+      "frl_aod": 25.357,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 2660,
+      "existing_aod": 23.874,
+      "frl_aod": 25.374,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 2680,
+      "existing_aod": 23.891,
+      "frl_aod": 25.391,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 2700,
+      "existing_aod": 23.908,
+      "frl_aod": 25.408,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 2720,
+      "existing_aod": 23.924,
+      "frl_aod": 25.424,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 2740,
+      "existing_aod": 23.941,
+      "frl_aod": 25.441,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 2760,
+      "existing_aod": 23.958,
+      "frl_aod": 25.458,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 2780,
+      "existing_aod": 23.975,
+      "frl_aod": 25.475,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 2800,
+      "existing_aod": 23.992,
+      "frl_aod": 25.492,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 2820,
+      "existing_aod": 24.008,
+      "frl_aod": 25.508,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 2840,
+      "existing_aod": 24.025,
+      "frl_aod": 25.525,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 2860,
+      "existing_aod": 24.042,
+      "frl_aod": 25.542,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 2880,
+      "existing_aod": 24.059,
+      "frl_aod": 25.559,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 2900,
+      "existing_aod": 24.076,
+      "frl_aod": 25.576,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 2920,
+      "existing_aod": 24.092,
+      "frl_aod": 25.592,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 2940,
+      "existing_aod": 24.109,
+      "frl_aod": 25.609,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 2960,
+      "existing_aod": 24.126,
+      "frl_aod": 25.626,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 2980,
+      "existing_aod": 24.143,
+      "frl_aod": 25.643,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 3000,
+      "existing_aod": 24.16,
+      "frl_aod": 25.66,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 3020,
+      "existing_aod": 24.176,
+      "frl_aod": 25.676,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 3040,
+      "existing_aod": 24.193,
+      "frl_aod": 25.693,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 3060,
+      "existing_aod": 24.21,
+      "frl_aod": 25.71,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 3080,
+      "existing_aod": 24.227,
+      "frl_aod": 25.727,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 3100,
+      "existing_aod": 24.244,
+      "frl_aod": 25.744,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 3120,
+      "existing_aod": 24.261,
+      "frl_aod": 25.761,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 3140,
+      "existing_aod": 24.277,
+      "frl_aod": 25.777,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 3160,
+      "existing_aod": 24.294,
+      "frl_aod": 25.794,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 3180,
+      "existing_aod": 24.311,
+      "frl_aod": 25.811,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 3200,
+      "existing_aod": 24.328,
+      "frl_aod": 25.828,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 3220,
+      "existing_aod": 24.345,
+      "frl_aod": 25.845,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 3240,
+      "existing_aod": 24.361,
+      "frl_aod": 25.861,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 3260,
+      "existing_aod": 24.378,
+      "frl_aod": 25.878,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 3280,
+      "existing_aod": 24.395,
+      "frl_aod": 25.895,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 3300,
+      "existing_aod": 24.412,
+      "frl_aod": 25.912,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 3320,
+      "existing_aod": 24.429,
+      "frl_aod": 25.929,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 3340,
+      "existing_aod": 24.445,
+      "frl_aod": 25.945,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 3360,
+      "existing_aod": 24.462,
+      "frl_aod": 25.962,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 3380,
+      "existing_aod": 24.479,
+      "frl_aod": 25.979,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 3400,
+      "existing_aod": 24.496,
+      "frl_aod": 25.996,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 3420,
+      "existing_aod": 24.513,
+      "frl_aod": 26.013,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 3440,
+      "existing_aod": 24.529,
+      "frl_aod": 26.029,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 3460,
+      "existing_aod": 24.546,
+      "frl_aod": 26.046,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 3480,
+      "existing_aod": 24.563,
+      "frl_aod": 26.063,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 3500,
+      "existing_aod": 24.58,
+      "frl_aod": 26.08,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 3520,
+      "existing_aod": 24.597,
+      "frl_aod": 26.097,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 3540,
+      "existing_aod": 24.613,
+      "frl_aod": 26.113,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 3560,
+      "existing_aod": 24.63,
+      "frl_aod": 26.13,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 3580,
+      "existing_aod": 24.647,
+      "frl_aod": 26.147,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 3600,
+      "existing_aod": 21.7,
+      "frl_aod": 26.164,
+      "cut_depth": -4.464
+    },
+    {
+      "chainage": 3620,
+      "existing_aod": 21.7,
+      "frl_aod": 26.181,
+      "cut_depth": -4.481
+    },
+    {
+      "chainage": 3640,
+      "existing_aod": 21.7,
+      "frl_aod": 26.197,
+      "cut_depth": -4.497
+    },
+    {
+      "chainage": 3660,
+      "existing_aod": 21.7,
+      "frl_aod": 26.214,
+      "cut_depth": -4.514
+    },
+    {
+      "chainage": 3680,
+      "existing_aod": 21.7,
+      "frl_aod": 26.231,
+      "cut_depth": -4.531
+    },
+    {
+      "chainage": 3700,
+      "existing_aod": 24.748,
+      "frl_aod": 26.248,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 3720,
+      "existing_aod": 24.765,
+      "frl_aod": 26.265,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 3740,
+      "existing_aod": 24.782,
+      "frl_aod": 26.282,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 3760,
+      "existing_aod": 24.798,
+      "frl_aod": 26.298,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 3780,
+      "existing_aod": 24.815,
+      "frl_aod": 26.315,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 3800,
+      "existing_aod": 24.832,
+      "frl_aod": 26.332,
+      "cut_depth": -1.5
+    },
+    {
+      "chainage": 3820,
+      "existing_aod": 24.849,
+      "frl_aod": 26.386,
+      "cut_depth": -1.537
+    },
+    {
+      "chainage": 3840,
+      "existing_aod": 24.866,
+      "frl_aod": 26.484,
+      "cut_depth": -1.618
+    },
+    {
+      "chainage": 3860,
+      "existing_aod": 24.882,
+      "frl_aod": 26.611,
+      "cut_depth": -1.729
+    },
+    {
+      "chainage": 3880,
+      "existing_aod": 24.899,
+      "frl_aod": 26.762,
+      "cut_depth": -1.863
+    },
+    {
+      "chainage": 3900,
+      "existing_aod": 24.916,
+      "frl_aod": 26.933,
+      "cut_depth": -2.017
+    },
+    {
+      "chainage": 3920,
+      "existing_aod": 24.933,
+      "frl_aod": 27.122,
+      "cut_depth": -2.189
+    },
+    {
+      "chainage": 3940,
+      "existing_aod": 24.95,
+      "frl_aod": 27.328,
+      "cut_depth": -2.378
+    },
+    {
+      "chainage": 3960,
+      "existing_aod": 24.966,
+      "frl_aod": 27.548,
+      "cut_depth": -2.582
+    },
+    {
+      "chainage": 3980,
+      "existing_aod": 24.983,
+      "frl_aod": 27.783,
+      "cut_depth": -2.8
+    },
+    {
+      "chainage": 4000,
+      "existing_aod": 25.0,
+      "frl_aod": 28.032,
+      "cut_depth": -3.032
+    }
+  ],
+  "resources": [
+    {
+      "label": "Site compound",
+      "rate": 175000.0,
+      "unit": "Item"
+    },
+    {
+      "label": "Temporary railway crossing",
+      "rate": 280000.0,
+      "unit": "Item"
+    },
+    {
+      "label": "Fencing posts and bars",
+      "rate": 20.72,
+      "unit": "m"
+    },
+    {
+      "label": "Suitable fill (imported)",
+      "rate": 7.139999999999999,
+      "unit": "cu m"
+    },
+    {
+      "label": "Capping",
+      "rate": 10.639999999999999,
+      "unit": "cu m"
+    },
+    {
+      "label": "Sub-base",
+      "rate": 15.679999999999998,
+      "unit": "cu m"
+    },
+    {
+      "label": "Cement bound lower base",
+      "rate": 60.199999999999996,
+      "unit": "cu m"
+    },
+    {
+      "label": "Asphalt upper base",
+      "rate": 107.8,
+      "unit": "cu m"
+    },
+    {
+      "label": "Asphalt binder course",
+      "rate": 112.0,
+      "unit": "cu m"
+    },
+    {
+      "label": "Asphalt surface course",
+      "rate": 124.6,
+      "unit": "cu m"
+    },
+    {
+      "label": "Porous drainage pipe 300mm",
+      "rate": 13.299999999999999,
+      "unit": "m"
+    },
+    {
+      "label": "Concrete drainage pipe 1000mm",
+      "rate": 33.599999999999994,
+      "unit": "m"
+    },
+    {
+      "label": "Pea gravel",
+      "rate": 30.799999999999997,
+      "unit": "cu m"
+    },
+    {
+      "label": "Crash barrier + posts",
+      "rate": 24.5,
+      "unit": "m"
+    },
+    {
+      "label": "Road studs + adhesive",
+      "rate": 79800.0,
+      "unit": "Item"
+    },
+    {
+      "label": "Road signs",
+      "rate": 32199.999999999996,
+      "unit": "Item"
+    },
+    {
+      "label": "Steel sheet piles, 5m length",
+      "rate": 281.4,
+      "unit": "m"
+    },
+    {
+      "label": "Steel piles, 12m length",
+      "rate": 1190.0,
+      "unit": "number"
+    },
+    {
+      "label": "Blinding concrete",
+      "rate": 49.0,
+      "unit": "cu m"
+    },
+    {
+      "label": "Reinforcement - pre-bent",
+      "rate": 826.0,
+      "unit": "tonnes"
+    },
+    {
+      "label": "Formwork - reusable (assume 2/3 reused)",
+      "rate": 10.5,
+      "unit": "sq m"
+    },
+    {
+      "label": "Formwork - permanent",
+      "rate": 8.54,
+      "unit": "sq m"
+    },
+    {
+      "label": "Concrete Class C40/50",
+      "rate": 114.8,
+      "unit": "cu m"
+    },
+    {
+      "label": "Bridge bearings",
+      "rate": 489.99999999999994,
+      "unit": "no"
+    },
+    {
+      "label": "M2 concrete beams, 17.5m",
+      "rate": 8750.0,
+      "unit": "no"
+    },
+    {
+      "label": "M5 concrete beams, 21.4m",
+      "rate": 11620.0,
+      "unit": "no"
+    },
+    {
+      "label": "Steel bridge beams, 50.0m",
+      "rate": 36400.0,
+      "unit": "no"
+    },
+    {
+      "label": "Bridge deck waterproofing system",
+      "rate": 23.799999999999997,
+      "unit": "sq m"
+    },
+    {
+      "label": "Movement joints",
+      "rate": 72.8,
+      "unit": "m"
+    },
+    {
+      "label": "Kerbs",
+      "rate": 6.3,
+      "unit": "m"
+    },
+    {
+      "label": "Bridge parapet railing",
+      "rate": 184.79999999999998,
+      "unit": "m"
+    },
+    {
+      "label": "Fill to structures",
+      "rate": 13.299999999999999,
+      "unit": "cu m"
+    },
+    {
+      "label": "Excavator + operator",
+      "rate": 1358.0,
+      "unit": "week day"
+    },
+    {
+      "label": "Backhoe loader + operator",
+      "rate": 1260.0,
+      "unit": "week day"
+    },
+    {
+      "label": "Dump truck + driver",
+      "rate": 1050.0,
+      "unit": "week day"
+    },
+    {
+      "label": "Dozer + operator",
+      "rate": 1302.0,
+      "unit": "week day"
+    },
+    {
+      "label": "Motor grader + operator",
+      "rate": 1260.0,
+      "unit": "week day"
+    },
+    {
+      "label": "Vibrating roller + driver",
+      "rate": 826.0,
+      "unit": "week day"
+    },
+    {
+      "label": "Large crane + operator",
+      "rate": 2282.0,
+      "unit": "week day"
+    },
+    {
+      "label": "Small crane + operator",
+      "rate": 1302.0,
+      "unit": "week day"
+    },
+    {
+      "label": "Pile driver + crew",
+      "rate": 1764.0,
+      "unit": "week day"
+    },
+    {
+      "label": "Paver + crew",
+      "rate": 2086.0,
+      "unit": "week day"
+    },
+    {
+      "label": "Bitumen sprayer + driver",
+      "rate": 951.9999999999999,
+      "unit": "week day"
+    },
+    {
+      "label": "Flatbed truck",
+      "rate": 350.0,
+      "unit": "week day"
+    },
+    {
+      "label": "Forklift",
+      "rate": 196.0,
+      "unit": "week day"
+    },
+    {
+      "label": "Concrete skip",
+      "rate": 28.0,
+      "unit": "week day"
+    },
+    {
+      "label": "Concrete pump + operator",
+      "rate": 1931.9999999999998,
+      "unit": "week day"
+    },
+    {
+      "label": "Vibrating poker",
+      "rate": 2.8,
+      "unit": "week day"
+    },
+    {
+      "label": "Compressor",
+      "rate": 16.799999999999997,
+      "unit": "week day"
+    },
+    {
+      "label": "Finishing screed",
+      "rate": 5.6,
+      "unit": "week day"
+    },
+    {
+      "label": "Water pump",
+      "rate": 30.799999999999997,
+      "unit": "week day"
+    },
+    {
+      "label": "Van for personnel transport",
+      "rate": 70.0,
+      "unit": "week day"
+    },
+    {
+      "label": "White-liner + lining materials + crew",
+      "rate": 937.9999999999999,
+      "unit": "week day"
+    },
+    {
+      "label": "Fence post auger",
+      "rate": 154.0,
+      "unit": "week day"
+    },
+    {
+      "label": "Tipper truck + driver",
+      "rate": 672.0,
+      "unit": "week day"
+    },
+    {
+      "label": "Engineer",
+      "rate": 322.0,
+      "unit": "week day"
+    },
+    {
+      "label": "Foreman/skilled operative",
+      "rate": 343.0,
+      "unit": "week day"
+    },
+    {
+      "label": "General labourer",
+      "rate": 210.0,
+      "unit": "week day"
+    },
+    {
+      "label": "Steel-fixer",
+      "rate": 308.0,
+      "unit": "week day"
+    },
+    {
+      "label": "Carpenter",
+      "rate": 308.0,
+      "unit": "week day"
+    }
+  ]
+}
