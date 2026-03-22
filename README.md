@@ -124,5 +124,5 @@ See [`docs/GAME_DESIGN.md`](docs/GAME_DESIGN.md) for full rules, scoring, and le
 
 ## 📄 Licence
 
-For educational use within the University of Nottingham CIVE module.  
+For educational use within the Civil Engineering Department at the University of Nottingham, Malaysia.  
 Simulation methodology adapted from *Dam Construction Game V7.1*, Engineering Management Group.
